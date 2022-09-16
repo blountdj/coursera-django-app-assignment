@@ -94,6 +94,10 @@ class Enrollment(models.Model):
     mode = models.CharField(max_length=5, choices=COURSE_MODES, default=AUDIT)
     rating = models.FloatField(default=5.0)
 
+class Question(models.Model):
+    description = models.CharField(max_length=254, default="description")
+    grade = models.IntegerField(default=0)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
 # <HINT> Create a Question Model with:
     # Used to persist question content for a course
@@ -123,6 +127,10 @@ class Enrollment(models.Model):
     # Indicate if this choice of the question is a correct one or not
     # Other fields and methods you would like to design
 # class Choice(models.Model):
+class Choice(models.Model):
+    description = models.CharField(max_length=254, default="description")
+    isCorrect = models.BooleanField(default=False)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
 # <HINT> The submission model
 # One enrollment could have multiple submission
@@ -132,3 +140,6 @@ class Enrollment(models.Model):
 #    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
 #    chocies = models.ManyToManyField(Choice)
 #    Other fields and methods you would like to design
+class Submission(models.Model):
+    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
+    chocies = models.ManyToManyField(Choice)
